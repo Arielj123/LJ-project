@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>删除添加</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script src="https://cdn.staticfile.org/vue-router/2.7.0/vue-router.min.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <style>
+    .inputDom {
+      position: relative;
+    }
+
+    .inputDom .el-icon {
+      position: absolute;
+      z-index: 999;
+      top: 2px;
+      right: -54px;
+      width: 50px;
+    }
+
+    .inputDom .el-icon .el-icon-circle-plus,
+    .el-icon-remove {
+      font-size: 20px;
+      color: #909399;
+    }
+
+    .inputDom .el-icon .el-icon-circle-plus {
+      color: #bc1e21;
+    }
+
+
+    .inputDom .el-icon .el-icon-circle-plus:hover,
+    .inputDom .el-icon .el-icon-remove:hover {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="id">
+    <template>
+      <el-form ref="form" :model="form" :inline="true" :rules="rules" label-width="140px">
+        <el-form-item v-for="(item,index) in servicerArr" :label="item.label" :key="index" class="inputDom"
+          :prop="item.value">
+          <div class="el-icon">
+            <template v-if="servicerArr.length > 1&&index!==0">
+              <i class="el-icon-remove" @click="handleDelServicer(item,index)" />
+            </template>
+            <template v-if="index ===servicerArr.length-1&&servicerArr.length!==10">
+              <i class="el-icon-circle-plus" @click="handleAddServicer" />
+            </template>
+          </div>
+          <el-select v-model="form[item.value]" placeholder="请选择业务人员" @change="selectChange">
+            <el-option v-for="item in yewurenyuanArr" :key="item.value" :label="item.label"
+              :value="item.value" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+    </template>
+  </div>
+  <script>
+    const app = new Vue({
+      el: '#id',
+      router: new VueRouter({
+        routes: []
+      }),
+      data: {
+        form:{},
+        rules:{},
+        servicerArr: [{
+          label: '业务员1',
+          value: 'yewurenyuan1',
+          index: 1
+        }],
+        yewurenyuanArr: [{value: 0, label: '张三'}, {value: 1, label: '李四'}]
+      },
+      mounted() {},
+      methods: {
+        // 添加业务员
+        handleAddServicer() {
+          let index = this.servicerArr[this.servicerArr.length - 1].index + 1
+          this.servicerArr.push({
+            label: `业务员${index}`,
+            value: `yewurenyuan${index}`,
+            index: index
+          })
+        },
+
+        // 删除业务员
+        handleDelServicer(item, index) {
+          this.servicerArr.splice(index, 1)
+          delete this.form[item.value]
+        },
+
+        selectChange(val){
+          console.log('val',val)
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
